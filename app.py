@@ -1,18 +1,20 @@
-#!/usr/local/bin/python
+"""
+Entry into backend api
+"""
 from flask import Flask, jsonify
-import os
 
-from config.config import Config
+from recs.config.config import Config
 
-config = Config(False)
+CONFIG = Config(False)
+APP = Flask(__name__)
 
-app = Flask(__name__)
-
-@app.route("/api/v1.0/", methods=["GET"])
-def apiRoot():
-    return jsonify({"key": "val"})
-
-
+@APP.route("/api/v1.0/", methods=["GET"])
+def api_root():
+  """
+    base url for the backend api
+  """
+  return jsonify({"key": "val"})
 
 if __name__ == "__main__":
-  app.run(port=9934, debug = config.options['debug'])
+  APP.run(port=9934, debug=CONFIG.options['debug'])
+
