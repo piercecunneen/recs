@@ -1,3 +1,4 @@
 {
-  "phabricator.uri" : "http://ec2-54-166-7-81.compute-1.amazonaws.com/"
+  "phabricator.uri" : "http://ec2-54-166-7-81.compute-1.amazonaws.com/",
+  "history.immutable": true
 }
