@@ -3,7 +3,7 @@ Destroys tables within the database.
 Most commonly used during teardown stage
 """
 
-import recs.src.db.db_lib as db
+import src.db.db_lib as db
 
 def drop_table(db_name, table_name):
   """

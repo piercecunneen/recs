@@ -2,7 +2,7 @@
 Creates tables within the database.
 Most commonly used during setup stage
 """
-import recs.src.db.db_lib as db
+import src.db.db_lib as db
 
 def create_table(db_name, table_name, column_names, column_types):
   """
