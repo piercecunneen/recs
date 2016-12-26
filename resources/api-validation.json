@@ -1,15 +1,27 @@
 {
   "create_user": {
-    "userID": {
-      "type" : "string",
+    "fb_id": {
+      "type" : "int",
       "required": true
     },
-    "username": {
-      "type" : "string",
+    "name": {
+      "type": "string",
       "required": true
     },
     "email": {
       "type" : "string",
+      "required": false
+    },
+    "lower_age_limit": {
+      "type" : "int",
+      "required": false
+    },
+    "upper_age_limit": {
+      "type" : "int",
+      "required": false
+    },
+    "gender": {
+      "type" : "char",
       "required": false
     }
   }
