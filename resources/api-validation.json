@@ -1,28 +1,56 @@
 {
-  "create_user": {
-    "fb_id": {
-      "type" : "int",
-      "required": true
+    "create_user": {
+        "fb_id": {
+            "type" : "int",
+            "required": true
+        },
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "email": {
+            "type" : "string",
+            "required": false
+        },
+        "lower_age_limit": {
+            "type" : "int",
+            "required": false
+        },
+        "upper_age_limit": {
+            "type" : "int",
+            "required": false
+        },
+        "gender": {
+            "type" : "char",
+            "required": false
+        }
     },
-    "name": {
-      "type": "string",
-      "required": true
+    "add_request": {
+        "from_user_id": {
+            "type": "int",
+            "required": true
+        },
+        "to_user_id": {
+            "type": "int",
+            "required": true
+        },
+        "item_type": {
+            "type": "int",
+            "required": true
+        }
     },
-    "email": {
-      "type" : "string",
-      "required": false
-    },
-    "lower_age_limit": {
-      "type" : "int",
-      "required": false
-    },
-    "upper_age_limit": {
-      "type" : "int",
-      "required": false
-    },
-    "gender": {
-      "type" : "char",
-      "required": false
+    "add_recommendation": {
+        "from_user_id": {
+            "type": "int",
+            "required": true
+        },
+        "to_user_id": {
+            "type": "int",
+            "required": true
+        },
+        "item_id": {
+            "type": "int",
+            "required": true
+        }
     }
-  }
 }
