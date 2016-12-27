@@ -3,6 +3,9 @@ Set of commonly used database functions that are shared
 across the codebase
 """
 import psycopg2 as pg
+import psycopg2.errorcodes as errorcodes
+
+
 
 def execute_db_query(db_name, query_string, args):
   """
@@ -20,8 +23,8 @@ def execute_db_query(db_name, query_string, args):
   try:
     curr.execute(query_string, args)
     conn.commit()
-  except pg.OperationalError as err:
-    return err
+  except pg.Error as err:
+    return errorcodes.lookup(err.pgcode)
 
   curr.close()
   conn.close()

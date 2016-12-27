@@ -39,10 +39,8 @@ def create_user():
   request_body = request.json
   validation = validate.validate_request(api_validation['create_user'], request_body)
   if validation:
-    users.create_user(
-      request_body
-    )
-    return "Good request\n"
+    return users.create_user(request_body)
+
   else:
     return jsonify(bad_request)
 
