@@ -24,8 +24,14 @@ def create_table(db_name, table_name, column_names, column_types, f_keys, p_keys
   foreign_key_strings = ["FOREIGN KEY (%s) REFERENCES %s (%s)" %(fk['column'], fk['foreign_table'], fk['foreign_column']) for fk in f_keys]
   primary_key_strings = ["PRIMARY KEY (%s)" %(key) for key in p_keys]
   columns = ["%s %s" %(pair[0], pair[1]) for pair in zip(column_names, column_types)]
-  query_string = "CREATE TABLE %s (%s, %s, %s)" %(table_name, ', '.join(columns), ', '.join(foreign_key_strings), ', '.join(primary_key_strings))
+  query_string = "CREATE TABLE %s (%s" %(table_name, ', '.join(columns))
+  if len(foreign_key_strings):
+    query_string = "%s, %s" %(query_string, ', '.join(foreign_key_strings))
+  if len(primary_key_strings):
+    query_string = "%s, %s" %(query_string, ', '.join(primary_key_strings))
+  query_string = "%s)" %(query_string)
   error = db.execute_db_query(db_name, query_string, [])
   # pylint: enable=line-too-long
   return error
-# pylint: enable=too-many-arguments
+  # pylint: enable=too-many-arguments
+

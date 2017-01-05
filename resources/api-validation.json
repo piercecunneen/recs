@@ -52,5 +52,25 @@
             "type": "int",
             "required": true
         }
+    },
+    "get_album_favorite_data": {
+        "album_id": {
+            "type": "int",
+            "required": true
+        },
+        "track_ids": {
+            "type": "list",
+            "required": true
+        }
+    },
+    "get_album_recommendation_data": {
+        "album_id": {
+            "type": "int",
+            "required": true
+        },
+        "track_ids": {
+            "type": "list",
+            "required": true
+        }
     }
 }

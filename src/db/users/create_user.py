@@ -17,7 +17,7 @@ def create_user(user):
       is either an error or None (if query successful)
   """
   query_string = "INSERT INTO users\
-                 ( fb_id, name, email, lower_age_range, upper_age_range, gender)\
+                 ( user_id, name, email, lower_age_range, upper_age_range, gender)\
                   VALUES (%s, %s, %s, %s, %s, %s)"
   args = [
     user['fb_id'],

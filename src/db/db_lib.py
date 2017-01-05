@@ -25,6 +25,11 @@ def execute_db_query(db_name, query_string, args):
     conn.commit()
   except pg.Error as err:
     return errorcodes.lookup(err.pgcode)
+  try:
+    result = curr.fetchall()
+  except pg.ProgrammingError:
+    result = None
 
   curr.close()
   conn.close()
+  return result

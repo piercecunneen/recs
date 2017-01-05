@@ -10,8 +10,8 @@ from routing import crossdomain
 # db functions
 import src.db.users.create_user as  users
 import src.db.requests.add_request as request_db
-import src.db.recommendation.add_recommendation as recommendation_db
-
+import src.db.recommendations as rec_db
+import src.db.favorites as fav_db
 
 from scripts import validate
 
@@ -81,7 +81,7 @@ def add_recommendation():
     request_body = request.json
     validation = validate.validate_request(api_validation['add_recommendation'], request_body)
     if validation:
-      result = recommendation_db.add_recommendation(request_body)
+      result = rec_db.add_rec(request_body)
       if not result:
         return "Good POST"
       else:
@@ -90,6 +90,91 @@ def add_recommendation():
     else:
       return jsonify(bad_request)
 
+@app.route("/api/v1.0/get_album_recommendation_data/", methods=["GET", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def get_album_recommendation_data():
+  """
+    add (POST) a recommendation
+  """
+  request_body = request.json
+  validation = validate.validate_request(
+    api_validation['get_album_recommendation_data'],
+    request_body
+  )
+
+  if validation:
+    result = rec_db.get_album_rec_data(request_body)
+
+    if not result:
+      return jsonify({})
+    else:
+
+      relevant_results = [
+        {
+          'from_user_id':    row[1],
+          'item_id': row[3]
+        }
+        for row  in result
+      ]
+      results_filtered = {}
+      for row in relevant_results:
+        print row
+        item_id = row['item_id']
+        if results_filtered.get(item_id):
+          results_filtered[item_id]['items'].append([row['from_user_id']])
+          results_filtered[item_id]['count'] += 1
+        else:
+          results_filtered[item_id] = {}
+          results_filtered[item_id]['count'] = 1
+          results_filtered[item_id]['items'] = [[row['from_user_id']]]
+      return jsonify(results_filtered)
+  else:
+    return jsonify(bad_request)
+
+@app.route("/api/v1.0/get_album_favorite_data/", methods=["GET", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def get_album_favorite_data():
+  """
+    add (POST) a recommendation
+  """
+  request_body = request.json
+  validation = validate.validate_request(
+    api_validation['get_album_favorite_data'],
+    request_body
+  )
+
+  if validation:
+    result = fav_db.get_album_fav_data(request_body)
+
+    if not result:
+      return jsonify({})
+    else:
+
+      relevant_results = [
+        {
+          'user_id':    row[0],
+          'item_id':    row[1],
+          'item_type':  row[2]
+        }
+        for row  in result
+      ]
+      results_filtered = {}
+      for row in relevant_results:
+        print row
+        item_id = row['item_id']
+        if results_filtered.get(item_id):
+          results_filtered[item_id]['items'].append([row['user_id'], row['item_type']])
+          results_filtered[item_id]['count'] += 1
+        else:
+          results_filtered[item_id] = {}
+          results_filtered[item_id]['count'] = 1
+          results_filtered[item_id]['items'] = [[row['user_id'], row['item_type']]]
+      return jsonify(results_filtered)
+  else:
+    return jsonify(bad_request)
+
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=2323, debug=CONFIG.options['debug'])
+
+
 
