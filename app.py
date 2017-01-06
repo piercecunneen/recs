@@ -55,7 +55,7 @@ def create_user():
 @crossdomain(origin='*', headers='Content-Type')
 def add_request():
   """
-    add (POST) a request for a recommendation
+    add a request for a recommendation
   """
   if request.method == "POST":
     request_body = request.json
@@ -75,26 +75,25 @@ def add_request():
 @crossdomain(origin='*', headers='Content-Type')
 def add_recommendation():
   """
-    add (POST) a recommendation
+    add  a recommendation
   """
-  if request.method == "POST":
-    request_body = request.json
-    validation = validate.validate_request(api_validation['add_recommendation'], request_body)
-    if validation:
-      result = rec_db.add_rec(request_body)
-      if not result:
-        return "Good POST"
-      else:
-        return result
-
+  request_body = request.json
+  validation = validate.validate_request(api_validation['add_recommendation'], request_body)
+  if validation:
+    result = rec_db.add_rec(request_body)
+    if not result:
+      return "Good POST"
     else:
-      return jsonify(bad_request)
+      return result
 
-@app.route("/api/v1.0/get_album_recommendation_data/", methods=["GET", "OPTIONS"])
+  else:
+    return jsonify(bad_request)
+
+@app.route("/api/v1.0/get_album_recommendation_data/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
 def get_album_recommendation_data():
   """
-    add (POST) a recommendation
+    get album recommendation data (album and tracks)
   """
   request_body = request.json
   validation = validate.validate_request(
@@ -118,7 +117,6 @@ def get_album_recommendation_data():
       ]
       results_filtered = {}
       for row in relevant_results:
-        print row
         item_id = row['item_id']
         if results_filtered.get(item_id):
           results_filtered[item_id]['items'].append([row['from_user_id']])
@@ -131,11 +129,11 @@ def get_album_recommendation_data():
   else:
     return jsonify(bad_request)
 
-@app.route("/api/v1.0/get_album_favorite_data/", methods=["GET", "OPTIONS"])
+@app.route("/api/v1.0/get_album_favorite_data/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
 def get_album_favorite_data():
   """
-    add (POST) a recommendation
+    get album favorite data (album and tracks)
   """
   request_body = request.json
   validation = validate.validate_request(
@@ -145,7 +143,6 @@ def get_album_favorite_data():
 
   if validation:
     result = fav_db.get_album_fav_data(request_body)
-
     if not result:
       return jsonify({})
     else:
@@ -160,7 +157,6 @@ def get_album_favorite_data():
       ]
       results_filtered = {}
       for row in relevant_results:
-        print row
         item_id = row['item_id']
         if results_filtered.get(item_id):
           results_filtered[item_id]['items'].append([row['user_id'], row['item_type']])

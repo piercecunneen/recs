@@ -49,13 +49,13 @@
             "required": true
         },
         "item_id": {
-            "type": "int",
+            "type": "string",
             "required": true
         }
     },
     "get_album_favorite_data": {
         "album_id": {
-            "type": "int",
+            "type": "string",
             "required": true
         },
         "track_ids": {
@@ -65,7 +65,7 @@
     },
     "get_album_recommendation_data": {
         "album_id": {
-            "type": "int",
+            "type": "string",
             "required": true
         },
         "track_ids": {

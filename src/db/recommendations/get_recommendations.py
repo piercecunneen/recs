@@ -12,9 +12,7 @@ def get_album_recommendation_data(request_body):
 
   ids = [str(item_id) for item_id in request_body['track_ids']]
   ids.append(str(request_body['album_id']))
-  id_string = ', '.join(ids)
 
-  query_string = "SELECT * from recommendations where item_id in (%s)" %(id_string)
-  args = []
+  query_string = "SELECT * from recommendations where item_id = ANY (%s)"
 
-  return db.execute_db_query("Helix", query_string, args)
+  return db.execute_db_query("Helix", query_string, [ids,])
