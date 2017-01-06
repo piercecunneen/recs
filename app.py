@@ -89,6 +89,42 @@ def add_recommendation():
   else:
     return jsonify(bad_request)
 
+@app.route("/api/v1.0/add_favorite/", methods=["POST", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def add_favorite():
+  """
+    add  a recommendation
+  """
+  request_body = request.json
+  validation = validate.validate_request(api_validation['add_favorite'], request_body)
+  if validation:
+    result = fav_db.add_fav(request_body)
+    if not result:
+      return "Good POST"
+    else:
+      return result
+
+  else:
+    return jsonify(bad_request)
+
+@app.route("/api/v1.0/remove_favorite/", methods=["POST", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def remove_favorite():
+  """
+    add  a recommendation
+  """
+  request_body = request.json
+  validation = validate.validate_request(api_validation['remove_favorite'], request_body)
+  if validation:
+    result = fav_db.remove_fav(request_body)
+    if not result:
+      return "Good POST"
+    else:
+      return result
+
+  else:
+    return jsonify(bad_request)
+
 @app.route("/api/v1.0/get_album_recommendation_data/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
 def get_album_recommendation_data():
@@ -159,12 +195,12 @@ def get_album_favorite_data():
       for row in relevant_results:
         item_id = row['item_id']
         if results_filtered.get(item_id):
-          results_filtered[item_id]['items'].append([row['user_id'], row['item_type']])
+          results_filtered[item_id]['items'].append({'user_id': row['user_id'], 'item_type': row['item_type']})
           results_filtered[item_id]['count'] += 1
         else:
           results_filtered[item_id] = {}
           results_filtered[item_id]['count'] = 1
-          results_filtered[item_id]['items'] = [[row['user_id'], row['item_type']]]
+          results_filtered[item_id]['items'] = [{'user_id': row['user_id'], 'item_type': row['item_type']}]
       return jsonify(results_filtered)
   else:
     return jsonify(bad_request)

@@ -53,6 +53,34 @@
             "required": true
         }
     },
+    "add_favorite": {
+        "user_id": {
+            "type": "int",
+            "required": true
+        },
+        "item_id": {
+            "type": "string",
+            "required": true
+        },
+        "item_type": {
+            "type": "int",
+            "required": true
+        }
+    },
+    "remove_favorite": {
+        "user_id": {
+            "type": "int",
+            "required": true
+        },
+        "item_id": {
+            "type": "string",
+            "required": true
+        },
+        "item_type": {
+            "type": "int",
+            "required": false
+        }
+    },
     "get_album_favorite_data": {
         "album_id": {
             "type": "string",
