@@ -81,22 +81,14 @@
             "required": false
         }
     },
-    "get_album_favorite_data": {
-        "album_id": {
-            "type": "string",
-            "required": true
-        },
-        "track_ids": {
+    "albums_favorite_data": {
+        "albums": {
             "type": "list",
             "required": true
         }
     },
-    "get_album_recommendation_data": {
-        "album_id": {
-            "type": "string",
-            "required": true
-        },
-        "track_ids": {
+    "albums_recommendation_data": {
+       "albums": {
             "type": "list",
             "required": true
         }

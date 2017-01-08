@@ -19,7 +19,6 @@ def validate_request(valid_body, request_body):
       return False
   return num_required_fields_seen == len(required_fields)
 
-
 def type_match(valid_body_string, field):
   '''
     Returns true if the field has the correct type

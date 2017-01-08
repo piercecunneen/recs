@@ -125,83 +125,94 @@ def remove_favorite():
   else:
     return jsonify(bad_request)
 
-@app.route("/api/v1.0/get_album_recommendation_data/", methods=["POST", "OPTIONS"])
+@app.route("/api/v1.0/albums_recommendation_data/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
-def get_album_recommendation_data():
+def albums_recommendation_data():
   """
     get album recommendation data (album and tracks)
   """
   request_body = request.json
   validation = validate.validate_request(
-    api_validation['get_album_recommendation_data'],
+    api_validation['albums_recommendation_data'],
     request_body
   )
-
   if validation:
-    result = rec_db.get_album_rec_data(request_body)
-
-    if not result:
+    albums = {}
+    for album in request_body['albums']:
+      album_id = album['album_id']
+      albums[album_id] = rec_db.get_album_rec_data(album)
+    if not albums:
       return jsonify({})
     else:
-
-      relevant_results = [
-        {
-          'from_user_id':    row[1],
-          'item_id': row[3]
-        }
-        for row  in result
-      ]
-      results_filtered = {}
-      for row in relevant_results:
-        item_id = row['item_id']
-        if results_filtered.get(item_id):
-          results_filtered[item_id]['items'].append([row['from_user_id']])
-          results_filtered[item_id]['count'] += 1
-        else:
-          results_filtered[item_id] = {}
-          results_filtered[item_id]['count'] = 1
-          results_filtered[item_id]['items'] = [[row['from_user_id']]]
-      return jsonify(results_filtered)
+      albums_filtered = {}
+      for album_id in albums:
+        relevant_results = [
+          {
+            'from_user_id':    row[1],
+            'item_id': row[3]
+          }
+          for row  in albums[album_id]
+        ]
+        album_filtered = {}
+        for row in relevant_results:
+          item_id = row['item_id']
+          if album_filtered.get(item_id):
+            album_filtered[item_id]['items'].append([row['from_user_id']])
+            album_filtered[item_id]['count'] += 1
+          else:
+            album_filtered[item_id] = {}
+            album_filtered[item_id]['count'] = 1
+            album_filtered[item_id]['items'] = [[row['from_user_id']]]
+        albums_filtered[album_id] = album_filtered
+      return jsonify(albums_filtered)
   else:
     return jsonify(bad_request)
 
-@app.route("/api/v1.0/get_album_favorite_data/", methods=["POST", "OPTIONS"])
+@app.route("/api/v1.0/albums_favorite_data/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
-def get_album_favorite_data():
+def albums_favorite_data():
   """
     get album favorite data (album and tracks)
   """
   request_body = request.json
   validation = validate.validate_request(
-    api_validation['get_album_favorite_data'],
+    api_validation['albums_favorite_data'],
     request_body
   )
-
   if validation:
-    result = fav_db.get_album_fav_data(request_body)
-    if not result:
+    albums = {}
+    for album in request_body['albums']:
+      album_id = album['album_id']
+      albums[album_id] = fav_db.get_album_fav_data(album)
+    if not albums:
       return jsonify({})
     else:
-
-      relevant_results = [
-        {
-          'user_id':    row[0],
-          'item_id':    row[1],
-          'item_type':  row[2]
-        }
-        for row  in result
-      ]
-      results_filtered = {}
-      for row in relevant_results:
-        item_id = row['item_id']
-        if results_filtered.get(item_id):
-          results_filtered[item_id]['items'].append({'user_id': row['user_id'], 'item_type': row['item_type']})
-          results_filtered[item_id]['count'] += 1
-        else:
-          results_filtered[item_id] = {}
-          results_filtered[item_id]['count'] = 1
-          results_filtered[item_id]['items'] = [{'user_id': row['user_id'], 'item_type': row['item_type']}]
-      return jsonify(results_filtered)
+      albums_filtered = {}
+      for album_id in albums:
+        relevant_results = [
+          {
+            'user_id':    row[0],
+            'item_id':    row[1],
+            'item_type':  row[2]
+          }
+          for row  in albums[album_id]
+        ]
+        album_filtered = {}
+        for row in relevant_results:
+          item_id = row['item_id']
+          if album_filtered.get(item_id):
+            album_filtered[item_id]['items'].append(
+              {'user_id': row['user_id'], 'item_type': row['item_type']}
+            )
+            album_filtered[item_id]['count'] += 1
+          else:
+            album_filtered[item_id] = {}
+            album_filtered[item_id]['count'] = 1
+            album_filtered[item_id]['items'] = [
+              {'user_id': row['user_id'], 'item_type': row['item_type']}
+            ]
+        albums_filtered[album_id] = album_filtered
+      return jsonify(albums_filtered)
   else:
     return jsonify(bad_request)
 
