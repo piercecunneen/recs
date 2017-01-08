@@ -13,6 +13,8 @@ import src.db.requests.add_request as request_db
 import src.db.recommendations as rec_db
 import src.db.favorites as fav_db
 
+import src.db.music as music_db
+
 from scripts import validate
 
 CONFIG = Config(False)
@@ -264,6 +266,3 @@ def albums_favorite_data():
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=2323, debug=CONFIG.options['debug'])
-
-
-
