@@ -25,6 +25,10 @@ bad_request = {  # pylint: disable=invalid-name
   "error": "bad request"
 }
 
+good_request = { # pylint: disable=invalid-name
+
+}
+
 @app.route("/api/v1.0/", methods=["GET", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
 def api_root():
@@ -44,12 +48,54 @@ def create_user():
   if validation:
     result = users.create_user(request_body)
     if not result:
-      return "Good POST"
+      return jsonify(good_request)
     else:
       return result
 
   else:
     return jsonify(bad_request)
+
+@app.route("/api/v1.0/user_favorites/<user_id>/", methods=["GET", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def get_user_favorites(user_id):
+  """
+    returns all the favorites associated with a user
+  """
+
+  try:
+    user_id = int(user_id)
+  except ValueError:
+    return jsonify(bad_request)
+  result = fav_db.get_user_favorites(user_id)
+  if isinstance(result, list):
+    return jsonify(
+      {
+        'favorites': result[::-1]
+      }
+    )
+  else:
+    return result
+
+@app.route("/api/v1.0/user_recommendations/<user_id>/", methods=["GET", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def get_user_recommendations(user_id):
+  """
+    returns all the recommendations associated with a user
+  """
+
+  try:
+    user_id = int(user_id)
+  except ValueError:
+    return jsonify(bad_request)
+  result = rec_db.get_user_recommendations(user_id)
+  if isinstance(result, list):
+    return jsonify(
+      {
+        'favorites': result[::-1]
+      }
+    )
+  else:
+    return result
 
 @app.route("/api/v1.0/add_request/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -63,7 +109,7 @@ def add_request():
     if validation:
       result = request_db.add_request(request_body)
       if not result:
-        return "Good POST"
+        return jsonify(good_request)
       else:
         return result
 
@@ -82,7 +128,7 @@ def add_recommendation():
   if validation:
     result = rec_db.add_rec(request_body)
     if not result:
-      return "Good POST"
+      return jsonify(good_request)
     else:
       return result
 
@@ -100,7 +146,7 @@ def add_favorite():
   if validation:
     result = fav_db.add_fav(request_body)
     if not result:
-      return "Good POST"
+      return jsonify(good_request)
     else:
       return result
 
@@ -118,7 +164,7 @@ def remove_favorite():
   if validation:
     result = fav_db.remove_fav(request_body)
     if not result:
-      return "Good POST"
+      return jsonify(good_request)
     else:
       return result
 
