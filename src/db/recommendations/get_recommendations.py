@@ -25,6 +25,6 @@ def get_user_recommendations(user_id):
 
   query_string = "SELECT * FROM recommendations\
   INNER JOIN items ON (recommendations.item_id = items.item_id)\
-  where from_user_id = %s"
+  where from_user_id = %s or to_user_id = %s"
 
-  return db.execute_db_query("Helix", query_string, [user_id])
+  return db.execute_db_query("Helix", query_string, [user_id, user_id])
