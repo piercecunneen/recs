@@ -19,4 +19,6 @@ def add_favorite(favorite_data):
     favorite_data['item_type']
   ]
 
+  db.add_item(favorite_data['item_id'], favorite_data['item_data'])
+
   return db.execute_db_query("Helix", query_string, args)

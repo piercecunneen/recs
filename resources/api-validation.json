@@ -51,6 +51,10 @@
         "item_id": {
             "type": "string",
             "required": true
+        },
+        "item_data": {
+            "type": "object",
+            "required": true
         }
     },
     "add_favorite": {
@@ -64,6 +68,10 @@
         },
         "item_type": {
             "type": "int",
+            "required": true
+        },
+        "item_data": {
+            "type": "object",
             "required": true
         }
     },

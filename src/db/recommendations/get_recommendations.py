@@ -23,6 +23,8 @@ def get_user_recommendations(user_id):
    gets all recommendations associated with a user
   '''
 
-  query_string = "SELECT * FROM recommendations where from_user_id = %s"
+  query_string = "SELECT * FROM recommendations\
+  INNER JOIN items ON (recommendations.item_id = items.item_id)\
+  where from_user_id = %s"
 
   return db.execute_db_query("Helix", query_string, [user_id])

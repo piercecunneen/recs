@@ -13,8 +13,6 @@ import src.db.requests.add_request as request_db
 import src.db.recommendations as rec_db
 import src.db.favorites as fav_db
 
-import src.db.music as music_db
-
 from scripts import validate
 
 CONFIG = Config(False)
@@ -68,15 +66,23 @@ def get_user_favorites(user_id):
     user_id = int(user_id)
   except ValueError:
     return jsonify(bad_request)
-  result = fav_db.get_user_favorites(user_id)
-  if isinstance(result, list):
-    return jsonify(
-      {
-        'favorites': result[::-1]
+  favorites = fav_db.get_user_favorites(user_id)
+  favorites_obj = {
+    'favorites': []
+  }
+  if isinstance(favorites, list):
+    for fav in favorites:
+      fav_item = {
+        'user_id': fav[0],
+        'item_id': fav[1],
+        'item_type': fav[2],
+        'time_favorited': fav[3],
+        'item_data': fav[5]
       }
-    )
+      favorites_obj['favorites'].append(fav_item)
+    return jsonify(favorites_obj)
   else:
-    return result
+    return favorites
 
 @app.route("/api/v1.0/user_recommendations/<user_id>/", methods=["GET", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -89,15 +95,24 @@ def get_user_recommendations(user_id):
     user_id = int(user_id)
   except ValueError:
     return jsonify(bad_request)
-  result = rec_db.get_user_recommendations(user_id)
-  if isinstance(result, list):
-    return jsonify(
-      {
-        'favorites': result[::-1]
+  recommendations = rec_db.get_user_recommendations(user_id)
+  recommendations_obj = {
+    'recommendations': []
+  }
+  if isinstance(recommendations, list):
+    for rec in recommendations:
+      rec_item = {
+        'from_user_id':       rec[1],
+        'to_user_id':         rec[2],
+        'item_id':            rec[3],
+        'time_recommended':   rec[4],
+        'rating':             rec[5],
+        'item_data':          rec[7]
       }
-    )
+      recommendations_obj['recommendations'].append(rec_item)
+    return jsonify(recommendations_obj)
   else:
-    return result
+    return recommendations
 
 @app.route("/api/v1.0/add_request/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')

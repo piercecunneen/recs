@@ -20,6 +20,8 @@ def get_user_favorites(user_id):
    gets all favorites associated with a user
   '''
 
-  query_string = "SELECT * FROM favorites where user_id = %s"
+  query_string = "SELECT * FROM favorites\
+  INNER JOIN items ON (favorites.item_id = items.item_id)\
+  where user_id = %s"
 
   return db.execute_db_query("Helix", query_string, [user_id])

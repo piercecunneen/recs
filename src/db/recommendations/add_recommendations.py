@@ -19,4 +19,6 @@ def add_recommendation(request_object):
     request_object['item_id']
   ]
 
+  db.add_item(request_object['item_id'], request_object['item_data'])
+
   return db.execute_db_query("Helix", query_string, args)
