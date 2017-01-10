@@ -22,6 +22,7 @@ def get_user_favorites(user_id):
 
   query_string = "SELECT * FROM favorites\
   INNER JOIN items ON (favorites.item_id = items.item_id)\
-  where user_id = %s"
+  where user_id = %s\
+  order by time_favorited DESC"
 
   return db.execute_db_query("Helix", query_string, [user_id])
