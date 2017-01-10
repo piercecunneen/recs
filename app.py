@@ -298,4 +298,4 @@ def submit_rec_rating():
     return jsonify(bad_request)
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", port=2323, debug=CONFIG.options['debug'])
+  app.run(host="0.0.0.0", port=2323, debug=CONFIG.options['debug'], threaded=True)
