@@ -100,5 +100,15 @@
             "type": "list",
             "required": true
         }
+    },
+    "submit_rec_rating": {
+        "rec_id": {
+            "type": "int",
+            "required": true
+        },
+        "rating": {
+            "type": "int",
+            "required": true
+        }
     }
 }

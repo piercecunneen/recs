@@ -22,3 +22,19 @@ def add_recommendation(request_object):
   db.add_item(request_object['item_id'], request_object['item_data'])
 
   return db.execute_db_query("Helix", query_string, args)
+
+
+def add_rec_rating(request_object):
+  '''
+    add a rating for a recommendation
+  '''
+  # -1 for rating means no rating given yet
+  query_string = "UPDATE recommendations\
+                 SET rating = %s\
+                 WHERE rec_id = %s"
+  args = [
+    request_object['rating'],
+    request_object['rec_id']
+  ]
+
+  return db.execute_db_query("Helix", query_string, args)

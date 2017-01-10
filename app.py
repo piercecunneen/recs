@@ -102,6 +102,7 @@ def get_user_recommendations(user_id):
   if isinstance(recommendations, list):
     for rec in recommendations:
       rec_item = {
+        'rec_id':             rec[0],
         'from_user_id':       rec[1],
         'to_user_id':         rec[2],
         'item_id':            rec[3],
@@ -276,6 +277,23 @@ def albums_favorite_data():
             ]
         albums_filtered[album_id] = album_filtered
       return jsonify(albums_filtered)
+  else:
+    return jsonify(bad_request)
+
+@app.route("/api/v1.0/submit_rec_rating/", methods=["POST", "OPTIONS"])
+@crossdomain(origin='*', headers='Content-Type')
+def submit_rec_rating():
+  """
+    submit rating for a recommendation
+  """
+  request_body = request.json
+  validation = validate.validate_request(
+    api_validation['submit_rec_rating'],
+    request_body
+  )
+  if validation:
+    rec_db.add_rec_rating(request_body)
+    return jsonify(good_request)
   else:
     return jsonify(bad_request)
 
