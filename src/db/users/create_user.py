@@ -19,12 +19,17 @@ def create_user(user):
   query_string = "INSERT INTO users\
                  ( user_id, name, email, lower_age_range, upper_age_range, gender)\
                   VALUES (%s, %s, %s, %s, %s, %s)"
+
+  if user['gender'] == "M":
+    gender = 0
+  else:
+    gender = 1
   args = [
     user['fb_id'],
     user['name'],
     user['email'],
     user['lower_age_limit'],
     user['upper_age_limit'],
-    user['gender']
+    gender
   ]
   return db.execute_db_query("Helix", query_string, args)

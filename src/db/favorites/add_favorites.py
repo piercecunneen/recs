@@ -11,8 +11,8 @@ def add_favorite(favorite_data):
   '''
 
   query_string = "INSERT INTO favorites\
-                 (user_id, item_id, item_type, time_favorited)\
-                  VALUES (%s, %s, %s, current_timestamp)"
+                 (user_id, item_id, item_type)\
+                  VALUES (%s, %s, %s)"
   args = [
     favorite_data['user_id'],
     favorite_data['item_id'],

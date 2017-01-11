@@ -70,19 +70,19 @@ def get_user_favorites(user_id):
   favorites_obj = {
     'favorites': []
   }
-  if isinstance(favorites, list):
+  if isinstance(favorites, tuple):
     for fav in favorites:
       fav_item = {
         'user_id': fav[0],
         'item_id': fav[1],
         'item_type': fav[2],
         'time_favorited': fav[3],
-        'item_data': fav[5]
+        'item_data':  json.loads(fav[5])
       }
       favorites_obj['favorites'].append(fav_item)
     return jsonify(favorites_obj)
   else:
-    return favorites
+    return jsonify(favorites_obj)
 
 @app.route("/api/v1.0/user_recommendations/<user_id>/", methods=["GET", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -99,21 +99,21 @@ def get_user_recommendations(user_id):
   recommendations_obj = {
     'recommendations': []
   }
-  if isinstance(recommendations, list):
+  if isinstance(recommendations, tuple):
     for rec in recommendations:
       rec_item = {
         'rec_id':             rec[0],
         'from_user_id':       rec[1],
         'to_user_id':         rec[2],
         'item_id':            rec[3],
-        'time_recommended':   rec[4],
-        'rating':             rec[5],
-        'item_data':          rec[7]
+        'time_recommended':   rec[5],
+        'rating':             rec[6],
+        'item_data':          json.loads(rec[9])
       }
       recommendations_obj['recommendations'].append(rec_item)
     return jsonify(recommendations_obj)
   else:
-    return recommendations
+    return jsonify(recommendations_obj)
 
 @app.route("/api/v1.0/add_request/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -248,6 +248,7 @@ def albums_favorite_data():
     for album in request_body['albums']:
       album_id = album['album_id']
       albums[album_id] = fav_db.get_album_fav_data(album)
+      print albums
     if not albums:
       return jsonify({})
     else:

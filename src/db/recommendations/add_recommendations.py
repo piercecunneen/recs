@@ -11,8 +11,8 @@ def add_recommendation(request_object):
   '''
   # -1 for rating means no rating given yet
   query_string = "INSERT INTO recommendations\
-                 (from_user_id, to_user_id, item_id, time_recommended, rating)\
-                  VALUES (%s, %s, %s, current_timestamp, -1)"
+                 (from_user_id, to_user_id, item_id, item_type, rating)\
+                  VALUES (%s, %s, %s, 0, -1)"
   args = [
     request_object['from_user_id'],
     request_object['to_user_id'],

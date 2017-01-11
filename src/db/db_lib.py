@@ -3,8 +3,7 @@ Set of commonly used database functions that are shared
 across the codebase
 """
 import json
-import psycopg2 as pg
-import psycopg2.errorcodes as errorcodes
+import MySQLdb
 
 def add_item(item_id, item_data):
   '''
@@ -16,6 +15,7 @@ def add_item(item_id, item_data):
   args = [item_id, json.dumps(item_data)]
   return execute_db_query("Helix", query_string, args)
 
+
 def execute_db_query(db_name, query_string, args):
   """
   Inputs:
@@ -26,19 +26,15 @@ def execute_db_query(db_name, query_string, args):
     type:
       pg.Error or NoneType)
   """
-  conn = pg.connect("dbname=%s" %(db_name))
+  conn = MySQLdb.connect(db="%s" %(db_name), user="root", passwd="5BrnH+")
   curr = conn.cursor()
-
+  result = []
   try:
     curr.execute(query_string, args)
     conn.commit()
-  except pg.Error as err:
-    return errorcodes.lookup(err.pgcode)
-  try:
     result = curr.fetchall()
-  except pg.ProgrammingError:
-    result = None
-
+  except Exception as error: # pylint: disable=broad-except
+    print error
   curr.close()
   conn.close()
   return result
