@@ -24,7 +24,7 @@ def type_match(valid_body_string, field):
     Returns true if the field has the correct type
   '''
   if valid_body_string == "int":
-    return isinstance(field, int)
+    return isinstance(field, int) or isinstance(field, long)
   elif valid_body_string == "string" or valid_body_string == "char" and len(field) == 1:
     return isinstance(field, str) or isinstance(field, unicode)
   elif valid_body_string == "object":

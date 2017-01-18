@@ -7,7 +7,6 @@ itsdangerous==0.24
 Jinja2==2.8
 lazy-object-proxy==1.2.2
 MarkupSafe==0.23
-MySQL-python==1.2.5
 pylint==1.5.6
 requests==2.12.4
 six==1.10.0

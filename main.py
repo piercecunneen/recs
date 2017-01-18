@@ -13,6 +13,7 @@ import src.db.requests.add_request as request_db
 import src.db.recommendations as rec_db
 import src.db.favorites as fav_db
 
+import logging
 from scripts import validate
 
 CONFIG = Config(False)
@@ -30,11 +31,11 @@ good_request = { # pylint: disable=invalid-name
 }
 
 @app.route("/api/v1.0/", methods=["GET", "OPTIONS"])
-@crossdomain(origin='*', headers='Content-Type')
 def api_root():
   """
     base url for the backend api
   """
+  logging.info("THIS IS A TEST")
   return jsonify({"key": "val"})
 
 @app.route("/api/v1.0/create_user/", methods=["POST", "OPTIONS"])
@@ -71,6 +72,10 @@ def get_user_favorites(user_id):
     'favorites': []
   }
   if isinstance(favorites, tuple):
+    favorites_obj = {
+      'favorites': []
+    }
+    
     for fav in favorites:
       fav_item = {
         'user_id': fav[0],
@@ -132,6 +137,8 @@ def add_request():
         return result
 
     else:
+      logging.info("ERROR")
+      logging.info(request_body)
       return jsonify(bad_request)
 
 
@@ -151,6 +158,8 @@ def add_recommendation():
       return result
 
   else:
+    logging.info("ERROR")
+    logging.info(request_body)
     return jsonify(bad_request)
 
 @app.route("/api/v1.0/add_favorite/", methods=["POST", "OPTIONS"])
@@ -169,6 +178,9 @@ def add_favorite():
       return result
 
   else:
+    logging.info("ERROR")
+    logging.info(api_validation['add_favorite'])
+    logging.info(request_body)
     return jsonify(bad_request)
 
 @app.route("/api/v1.0/remove_favorite/", methods=["POST", "OPTIONS"])

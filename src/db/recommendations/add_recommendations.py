@@ -10,13 +10,15 @@ def add_recommendation(request_object):
     add a single recommendation from user A to user B
   '''
   # -1 for rating means no rating given yet
+  item_type = request_object['item_data']['type']
   query_string = "INSERT INTO recommendations\
                  (from_user_id, to_user_id, item_id, item_type, rating)\
-                  VALUES (%s, %s, %s, 0, -1)"
+                  VALUES (%s, %s,%s,  %s, -1)"
   args = [
     request_object['from_user_id'],
     request_object['to_user_id'],
-    request_object['item_id']
+    request_object['item_id'],
+    item_type
   ]
 
   db.add_item(request_object['item_id'], request_object['item_data'])

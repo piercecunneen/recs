@@ -9,14 +9,14 @@ def add_favorite(favorite_data):
   '''
     adds a user's favorite
   '''
-
+  item_type = favorite_data['item_data']['type']
   query_string = "INSERT INTO favorites\
                  (user_id, item_id, item_type)\
                   VALUES (%s, %s, %s)"
   args = [
     favorite_data['user_id'],
     favorite_data['item_id'],
-    favorite_data['item_type']
+    item_type
   ]
 
   db.add_item(favorite_data['item_id'], favorite_data['item_data'])
