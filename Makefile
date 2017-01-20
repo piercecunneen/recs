@@ -5,7 +5,7 @@ install:
 	pip install -r requirements.txt
 
 lint:
-	pylint src && pylint scripts && pylint tests && pylint app.py
+	pylint src && pylint scripts && pylint tests && pylint main.py
 
 test:
 	coverage run ./tests/main.py && coverage report --omit=./tests/*
