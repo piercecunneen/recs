@@ -110,7 +110,7 @@ def get_user_recommendations(user_id):
         'to_user_id':         rec[2],
         'item_id':            rec[3],
         'time_recommended':   rec[5],
-        'rating':             rec[6],
+        'rating':             rec[7],
         'item_data':          json.loads(rec[9])
       }
       recommendations_obj['recommendations'].append(rec_item)
