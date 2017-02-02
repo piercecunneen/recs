@@ -70,19 +70,19 @@ def get_user_favorites(user_id):
   favorites_obj = {
     'favorites': []
   }
-  if isinstance(favorites, tuple):
+  if isinstance(favorites, list):
     for fav in favorites:
       fav_item = {
-        'user_id': fav[0],
-        'item_id': fav[1],
-        'item_type': fav[2],
-        'time_favorited': fav[3],
-        'item_data':  json.loads(fav[5])
+        'user_id':        fav[1],
+        'item_id':        fav[2],
+        'item_type':      fav[3],
+        'time_favorited': fav[4],
+        'item_data':      fav[6]
       }
       favorites_obj['favorites'].append(fav_item)
     return jsonify(favorites_obj)
   else:
-    return jsonify(favorites_obj)
+    return favorites
 
 @app.route("/api/v1.0/user_recommendations/<user_id>/", methods=["GET", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -99,21 +99,22 @@ def get_user_recommendations(user_id):
   recommendations_obj = {
     'recommendations': []
   }
-  if isinstance(recommendations, tuple):
+  if isinstance(recommendations, list):
     for rec in recommendations:
       rec_item = {
         'rec_id':             rec[0],
         'from_user_id':       rec[1],
         'to_user_id':         rec[2],
         'item_id':            rec[3],
+        'item_type':          rec[4],
         'time_recommended':   rec[5],
-        'rating':             rec[6],
-        'item_data':          json.loads(rec[9])
+        'rating':             rec[7],
+        'item_data':          rec[9]
       }
       recommendations_obj['recommendations'].append(rec_item)
     return jsonify(recommendations_obj)
   else:
-    return jsonify(recommendations_obj)
+    return recommendations
 
 @app.route("/api/v1.0/add_request/", methods=["POST", "OPTIONS"])
 @crossdomain(origin='*', headers='Content-Type')
@@ -163,6 +164,7 @@ def add_favorite():
   validation = validate.validate_request(api_validation['add_favorite'], request_body)
   if validation:
     result = fav_db.add_fav(request_body)
+
     if not result:
       return jsonify(good_request)
     else:
@@ -200,6 +202,7 @@ def albums_recommendation_data():
     api_validation['albums_recommendation_data'],
     request_body
   )
+
   if validation:
     albums = {}
     for album in request_body['albums']:
@@ -248,7 +251,6 @@ def albums_favorite_data():
     for album in request_body['albums']:
       album_id = album['album_id']
       albums[album_id] = fav_db.get_album_fav_data(album)
-      print albums
     if not albums:
       return jsonify({})
     else:
@@ -256,9 +258,9 @@ def albums_favorite_data():
       for album_id in albums:
         relevant_results = [
           {
-            'user_id':    row[0],
-            'item_id':    row[1],
-            'item_type':  row[2]
+            'user_id':    row[1],
+            'item_id':    row[2],
+            'item_type':  row[3]
           }
           for row  in albums[album_id]
         ]
